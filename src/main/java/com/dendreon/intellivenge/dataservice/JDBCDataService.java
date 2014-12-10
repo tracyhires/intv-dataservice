@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
 
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Provider;
 
 public class JDBCDataService implements DataService {
@@ -18,7 +20,7 @@ public class JDBCDataService implements DataService {
     private Provider<DataSource> dataSourceProvider;
 
     @Inject
-    public JDBCDataService(@Named("CapacityJndi") Provider<DataSource> aDataSourceProvider) {
+    public JDBCDataService(@Named("XxsapJndi") Provider<DataSource> aDataSourceProvider) {
         dataSourceProvider = aDataSourceProvider;
     }
 
@@ -29,6 +31,8 @@ public class JDBCDataService implements DataService {
 		.addTableName(tableName)
 		.addParameters(Arrays.asList(queryParameters))
 		.build();
+		
+		LoggerFactory.getLogger(getClass()).info(queryString);
 		
 		DataSource dataSource = dataSourceProvider.get();
 		try {

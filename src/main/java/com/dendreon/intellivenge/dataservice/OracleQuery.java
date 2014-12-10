@@ -52,31 +52,31 @@ public final class OracleQuery {
 				if (parameters.size() > 0) {
 					queryString.append("where" + SPACE);
 					Iterator<QueryParameter> paramIter = parameters.iterator();
-					StringBuffer queryValues = new StringBuffer("(");
+					StringBuffer queryValues = new StringBuffer("values(");
 					while (paramIter.hasNext()) {
 						QueryParameter q = paramIter.next();
 						queryString.append(q.getColumnName() + SPACE);
 						switch(q.getQueryType()) {
 						case EQ:
-							queryString.append("=" + SPACE + "?" + SPACE);
+							queryString.append("=" + SPACE + q.getValue() + SPACE);
 							break;
 						case GT:
-							queryString.append(">" + SPACE + "?" + SPACE);
+							queryString.append(">" + SPACE + q.getValue() + SPACE);
 							break;
 						case GTE:
-							queryString.append(">=" + SPACE + "?" + SPACE);
+							queryString.append(">=" + SPACE + q.getValue() + SPACE);
 							break;
 						case LT:
-							queryString.append("<" + SPACE + "?" + SPACE);
+							queryString.append("<" + SPACE + q.getValue() + SPACE);
 							break;
 						case LTE:
-							queryString.append("<=" + SPACE + "?" + SPACE);
+							queryString.append("<=" + SPACE + q.getValue() + SPACE);
 							break;
 						case CONTAINS:
-							queryString.append("contains(?)" + SPACE);
+							queryString.append("contains(" + q.getValue() +")" + SPACE);
 							break;
 						case NEQ:
-							queryString.append("!=" + SPACE + "?" + SPACE);
+							queryString.append("!=" + SPACE + q.getValue() + SPACE);
 							break;
 						}
 						queryValues.append(q.getValue());
@@ -90,7 +90,7 @@ public final class OracleQuery {
 					}
 				}
 			}
-			return queryString.toString();
+			return queryString.toString() ;
 		}
 	}
 }

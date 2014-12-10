@@ -19,6 +19,9 @@
 		<logback.version>1.0.7</logback.version>
 		<dendreon-liquibase.version>1.0.0.1</dendreon-liquibase.version>
 		<surefire.version>2.7.2</surefire.version>
+		<guice.version>3.0</guice.version>
+		<testng.version>6.7</testng.version>
+		<persistence.utils.version>1.0.0.1</persistence.utils.version>
 	</properties>
 
 
@@ -45,6 +48,27 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+           <groupId>com.dendreon</groupId>
+           <artifactId>persistence-utils</artifactId>
+           <version>${persistence.utils.version}</version>
+       </dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-jndi</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-servlet</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 		<!-- Use liquibase to define schema used in the test database via the liquibase 
 			configuration in the test/resources/db directory. Whereas, the production 

@@ -8,12 +8,12 @@ import com.google.inject.TypeLiteral;
 import java.util.List;
 
 public class TestDataServiceModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        bind(new TypeLiteral<List<AbstractPersistService>>() {})
-                .toProvider(StaticPersistServiceListProvider.class);
 
-        install(new JndiDependenciesITModule());
-        install(new JDBCDataServiceModule());
-    }
+	@Override
+	protected void configure() {
+		bind(new TypeLiteral<List<AbstractPersistService>>() {})
+		.toProvider(StaticPersistServiceListProvider.class);
+		
+		install(new JDBCDataServiceModule());
+	}
 }
