@@ -9,7 +9,5 @@ public interface DataService {
 
 	ResultSet findRecords(String[] tableNames, QueryParameter join, QueryParameter[] queryParameters);
 	
-	ResultSetMetaData describeTable(String tabelname);
-	
-	
+	ResultSetMetaData describeTable(String tablename);
 }

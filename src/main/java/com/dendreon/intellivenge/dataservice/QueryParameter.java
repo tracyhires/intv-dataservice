@@ -1,7 +1,7 @@
 package com.dendreon.intellivenge.dataservice;
 
 public class QueryParameter {
-	
+
 	private String columnName;
 	private QueryType queryType;
 	private Object value;
@@ -35,5 +35,4 @@ public class QueryParameter {
 	public void setValue(Object value) {
 		this.value = value;
 	}
-
 }
