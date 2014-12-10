@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>com.dendreon.intellivenge</groupId>
 	<artifactId>dataservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>Intellivenge Data Service</name>
 
 	<properties>
