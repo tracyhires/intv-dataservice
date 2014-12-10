@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.dendreon</groupId>
     <artifactId>dendreon-parent</artifactId>
-    <version>1.0.0,1</version>
+    <version>1.0.0.1</version>
   </parent>
   <groupId>com.dendreon.intellivenge</groupId>
   <artifactId>dataservice</artifactId>
