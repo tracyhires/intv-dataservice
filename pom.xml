@@ -18,6 +18,7 @@
 		<slf4j.version>1.6.6</slf4j.version>
 		<logback.version>1.0.7</logback.version>
 		<dendreon-liquibase.version>1.0.0.1</dendreon-liquibase.version>
+		<surefire.version>2.7.2</surefire.version>
 	</properties>
 
 
@@ -45,24 +46,24 @@
 			</exclusions>
 		</dependency>
 
-        <!-- Use liquibase to define schema used in the test database via the
-             liquibase configuration in the test/resources/db directory. Whereas,
-             the production definition is in the database-definition module. -->
-        <dependency>
-            <groupId>com.dendreon</groupId>
-            <artifactId>liquibase</artifactId>
-            <version>${dendreon-liquibase.version}</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
+		<!-- Use liquibase to define schema used in the test database via the liquibase 
+			configuration in the test/resources/db directory. Whereas, the production 
+			definition is in the database-definition module. -->
+		<dependency>
+			<groupId>com.dendreon</groupId>
+			<artifactId>liquibase</artifactId>
+			<version>${dendreon-liquibase.version}</version>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
 
-        <!-- In-memory test database setup -->
-        <dependency>
-            <groupId>com.dendreon</groupId>
-            <artifactId>test-database</artifactId>
-            <scope>test</scope>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
+		<!-- In-memory test database setup -->
+		<dependency>
+			<groupId>com.dendreon</groupId>
+			<artifactId>test-database</artifactId>
+			<scope>test</scope>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 
@@ -71,7 +72,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
 				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
 					<systemPropertyVariables>
 						<!-- We set this so that our tests can know the root build directory 
 							in order to access customizations added as part of the testing process. -->

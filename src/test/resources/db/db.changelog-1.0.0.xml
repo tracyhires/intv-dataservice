@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ All information contained herein is, and remains the property of Dendreon
+  ~ Corporation and its suppliers, unless superseded by another license that
+  ~ is explicitly defined.
+  ~
+  ~ Copyright 2012 Dendreon Corporation
+  -->
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="1" author="ezupancic, fraggi, thires" context="test">
+        <createTable tableName="site_resource">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(360)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="code" type="varchar(10)" />
+            <column name="timezone_region" type="varchar(50)" />
+            <column name="address1" type="varchar(240)"/>
+            <column name="address2" type="varchar(240)"/>
+            <column name="city" type="varchar(150)"/>
+            <column name="state" type="varchar(60)"/>
+            <column name="postal_code" type="varchar(60)"/>
+            <column name="country" type="varchar(60)"/>
+            <column name="location_id" type="number(38)" />
+            <column name="party_site_id" type="number(38)" />
+            <column name="resource_type_id" type="number(38)"/>
+            <column name="parent_id" type="number(38)"/>
+            <column name="capacity" type="number(38)"/>
+            <column name="reserved" type="number(1)"/>
+            <column name="location_status" type="varchar(30)"/>
+            <column name="resource_status" type="varchar(30)"/>
+            <column name="po_required_flag" type="number(1)"/>
+            <column name="latitude" type="number(38,12)" />
+            <column name="longitude" type="number(38,12)" />
+            <column name="commercial_approved" type="number(1)" />
+            <column name="commercial_site" type="number(1)" />
+            <column name="clinical_approved" type="number(1)" />
+            <column name="clinical_site" type="number(1)" />
+            <column name="manufacturing_facility_id" type="number(38)"/>
+        </createTable>
+
+        <createTable tableName="appointment_pattern">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recurrance_id" type="number(38)"/>
+            <column name="recurrance_name" type="varchar(30)"/>
+            <column name="recurrance_interval" type="number(38)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="start_date" type="varchar(30)"/>
+            <column name="effective_from" type="varchar(30)"/>
+            <column name="effective_to" type="varchar(30)"/>
+            <column name="local_timezone" type="varchar(64)"/>
+            <column name="capacity" type="number(38)"/>
+            <column name="resource_id" type="number(38)"/>
+            <column name="location_id" type="number(38)"/>
+        </createTable>
+
+        <createTable tableName="calendar_item">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(30)"/>
+            <column name="recurrance_type" type="varchar(30)"/>
+            <column name="recurrance_interval" type="bigint"/>
+            <column name="region" type="varchar(30)"/>
+            <column name="start_time" type="varchar(30)"/>
+            <column name="end_time" type="varchar(30)"/>
+            <column name="effective_from" type="varchar(30))"/>
+            <column name="effective_to" type="varchar(30)"/>
+            <column name="resource_id" type="bigint"/>
+            <column name="local_timezone" type="varchar(30)"/>
+        </createTable>
+
+        <createTable tableName="sales_order_header">
+            <column name="id" type="number(15)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_number" type="number">
+                <constraints nullable="false"/>
+            </column>
+            <column name="doctor_id" type="varchar(240)" />
+            <column name="patient_id" type="varchar(240)" />
+            <column name="phs_number" type="varchar(240)" />
+            <column name="ppc_id" type="varchar(240)" />
+        </createTable>
+
+        <createTable tableName="patient">
+            <column name="id" type="number(15)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(150)" />
+            <column name="first_name" type="varchar(150)" />
+            <column name="middle_name" type="varchar(60)" />
+            <column name="date_of_birth" type="date" />
+            <column name="ccid" type="varchar(150)" />
+            <column name="gender" type="varchar(150)" />
+            <column name="subject_id" type="varchar(150)" />
+            <column name="phs_number" type="varchar(240)" />
+            <column name="ppc_id" type="varchar(240)" />
+            <column name="postal_code" type="varchar(20)" />
+            <column name="doctor_id" type="number(15)" />
+            <column name="commercial" type="number(1)" />
+            <column name="clinical" type="number(1)" />
+            <column name="SHIP_PO_NUMBER_1" type="varchar(20)"/>
+            <column name="SHIP_PO_NUMBER_2" type="varchar(20)"/>
+            <column name="SHIP_PO_NUMBER_3" type="varchar(20)"/>
+            <column name="preferred_language" type="varchar(100)"/>
+            <column name="communicate_english" type="number(1)"/>
+            <column name="payment_status" type="varchar(250)"/>
+            <column name="email" type="varchar(2000)"/>
+            <column name="primary_phone" type="varchar(40)"/>
+            <column name="day_of_appt_phone" type="varchar(40)"/>
+        </createTable>
+
+        <createTable tableName="doctor">
+            <column name="id" type="number(15)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(150)" />
+            <column name="last_name" type="varchar(150)" />
+            <column name="first_name" type="varchar(150)" />
+            <column name="middle_name" type="varchar(60)" />
+            <column name="address1" type="varchar(240)"/>
+            <column name="address2" type="varchar(240)"/>
+            <column name="city" type="varchar(150)"/>
+            <column name="state" type="varchar(60)"/>
+            <column name="country" type="varchar(60)"/>
+            <column name="postal_code" type="varchar(60)" />
+            <column name="latitude" type="number(38,12)" />
+            <column name="longitude" type="number(38,12)" />
+            <column name="is_clinical" type="number(1)" />
+            <column name="is_commercial" type="number(1)" />
+            
+        </createTable>
+
+        <createSequence sequenceName="seq_doctor_resource_id" startValue="1000" incrementBy="1" />
+
+        <createTable tableName="doctor_apheresis_site">
+            <column name="id" type="number(15)" defaultValueComputed="NEXTVAL('seq_doctor_resource_id')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doctor_id" type="number(15)" />
+            <column name="resource_id" type="number(15)" />
+            <column name="organization_rank" type="number(1)" />
+        </createTable>
+
+        <createTable tableName="doctor_infusion_site">
+            <column name="id" type="number(15)" defaultValueComputed="NEXTVAL('seq_doctor_resource_id')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doctor_id" type="number(15)" />
+            <column name="resource_id" type="number(15)" />
+            <column name="organization_rank" type="number(1)" />
+        </createTable>
+
+        <createTable tableName="doctor_plant">
+            <column name="id" type="number(15)" defaultValueComputed="NEXTVAL('seq_doctor_resource_id')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doctor_id" type="number(15)" />
+            <column name="resource_id" type="number(15)" />
+            <column name="organization_rank" type="number(1)" />
+        </createTable>
+
+        <createTable tableName="scheduling_parameters">
+            <column name="id" type="number(15)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="bags_per_treatment" type="number" />
+            <column name="inbound_expiration_time" type="number" />
+            <column name="inbound_expiration_buffer" type="number" />
+            <column name="outbound_expiration_time" type="number" />
+            <column name="infusion_to_expiration_time" type="number" />
+            <column name="days_between_treatments_target" type="number" />
+            <column name="days_between_treatments_min" type="number" />
+            <column name="days_between_treatments_max" type="number" />
+            <column name="minimum_PAPID_test_duration" type="number" />
+            <column name="minimum_workstation_buffer" type="number" />
+            <column name="minimum_incubation_buffer" type="number" />
+            <column name="maximum_incubation_buffer" type="number" />
+            <column name="packaging_finish_time" type="number" />
+            <column name="packaging_finish_time_buffer" type="number" />
+            <column name="day2_end_to_final_package_buff" type="number" />
+        </createTable>
+
+        <createTable tableName="plant_slot_definition">
+            <column name="id" type="number(15)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="location_id" type="number(15)" />
+            <column name="resource_id" type="number(15)" />
+            <column name="effective_from" type="varchar(30)" />
+            <column name="effective_to" type="varchar(30)" />
+            <column name="capacity" type="number" />
+            <column name="recurrance" type="varchar(30)" />
+            <column name="slot_type" type="char(5)" />
+            <column name="recurrance_interval" type="number" />
+            <column name="start_time" type="varchar(30)"/>
+            <column name="local_timezone" type="varchar(30)"/>
+        </createTable>
+
+        <createTable tableName = "activity">
+            <column name="id" type = "number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="treatment_id" type="number(38)" />
+            <column name="type" type="number(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scheduled_start" type="timestamp(6)"/>
+            <column name="actual_start" type="timestamp(6)"/>
+            <column name="scheduled_finish" type="timestamp(6)"/>
+            <column name="actual_finish" type="timestamp(6)"/>
+            <column name="resource_id" type="number(38)"/>
+            <column name="location_id" type="number(38)"/>
+            <column name="actual_bags" type="number(38)"/>
+        </createTable>
+
+        <createTable tableName = "ppc_type">
+            <column name="id" type = "number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName = "regimen">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="order_number" type="number">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status_id" type="number(38)" />
+            <column name="patient_id" type="number(38)" />
+            <column name="engine_response" type="varchar(4000)" />
+            <column name="creation_date" type="date" />
+            <column name="created_by_id" type="number(38)" />
+            <column name="product_id" type="number(38)" />
+            <column name="regimen_version" type="number(38)"/>
+        </createTable>
+
+        <createTable tableName="treatment">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="regimen_id" type="number(38)" />
+            <column name="apheresis_site_id" type="number(38)" />
+            <column name="infusion_site_id" type="number(38)" />
+            <column name="plant_id" type="number(38)" />
+            <column name="coi" type="varchar(240)" />
+            <column name="purchase_order" type="varchar(240)" />
+            <column name="infusion_expiration_time" type="timestamp" />
+            <column name="infusion_timezone" type="varchar(255)" />
+            <column name="plant_expiration_time" type="timestamp" />
+            <column name="plant_timezone" type="varchar(255)" />
+            <column name="status_id" type="number(38)" />
+        </createTable>
+
+        <createTable tableName = "scheduling_user">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="full_name" type="varchar(200)" />
+        </createTable>
+        
+        <createTable tableName = "manufacturing_facility">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName = "scheduling_request">
+            <column name="id" type="number(38)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="actual_start_date" type="timestamp(6)" />
+            <column name="actual_completion_date" type="timestamp(6)" />
+            <column name="engine_in_time" type="timestamp(6)" />
+            <column name="engine_out_time" type="timestamp(6)" />
+            <column name="comments" type="varchar(2000)" />
+            <column name="regimen_id" type="number" />
+            <column name="created_by_id" type="number(38)" />
+        </createTable>
+
+        <!-- Create a dummy stored procedure so that when we are trying to get the schema name
+             from Oracle we don't cause H2 errors. -->
+        <!-- TODO: Get this to work by sorting out java 1.7 vs 1.6 jvm dependencies
+        <createProcedure>
+            CREATE ALIAS SYS_CONTEXT AS $$
+            String sysContext(String key, String value) {
+                return &quot;Dummy Property&quot;;
+            }
+            $$;
+        </createProcedure>
+        -->
+
+        <createTable tableName="geolocation">
+            <column name="id" type="number" />
+            <column name="latitude" type="number" />
+            <column name="longitude" type="number" />
+            <column name="country" type="varchar(100)" />
+            <column name="postal_code" type="varchar(10)" />
+        </createTable>
+
+        <createTable tableName="product">
+        	<column name="id" type="number" />
+        	<column name="name" type="varchar(40)" />
+        	<column name="description" type="varchar(140)" />
+        	<column name="is_clinical" type="number(1)" />
+    	</createTable>
+        
+        <createTable tableName="protocol">
+        	<column name="id" type="number" />
+        	<column name="name" type="varchar(40)" />
+        	<column name="product_number" type="varchar(140)" />
+    	</createTable>
+        
+        <createTable tableName="plan">
+        	<column name="id" type="number" />
+        	<column name="protocol_id" type="number" />
+        	<column name="name" type="varchar(40)" />
+    	</createTable>
+    	
+    	<createTable tableName="activity_duration_override_grp">
+    		<column name="id" type="number" />
+    		<column name="name" type="varchar(100)" />
+    		<column name="effective_from" type="date" />
+    		<column name="effective_to" type="date" />
+    		<column name="location_id" type="number" />
+    		<column name="created_by_id" type="number(38)" />
+            <column name="last_updated_by_id" type="number(38)" />
+    	</createTable>
+    	
+    	<createTable tableName="activity_duration_override">
+    		<column name="id" type="number" />
+    		<column name="min_duration_override" type="number" />
+    		<column name="std_duration_override" type="number" />
+    		<column name="max_duration_override" type="number" />
+    		<column name="group_id" type="number" />
+    		<column name="type" type="number" />    	
+    		<column name="created_by_id" type="number(38)" />
+            <column name="last_updated_by_id" type="number(38)" />	
+    	</createTable>
+
+    </changeSet>
+
+    <changeSet id="2" author="ezupancic" context="test">
+        <insert tableName="scheduling_user">
+            <column name="id" valueNumeric="-100" />
+            <column name="user_name" value="ttesterson" />
+            <column name="full_name" value="Testerson, Testy" />
+        </insert>
+
+        <!-- Setup fixture for PPC menu -->
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="158981" />
+            <column name="name" value="Active" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139966" />
+            <column name="name" value="Medicaid" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139967" />
+            <column name="name" value="Medicare" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="158982" />
+            <column name="name" value="NCI" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139968" />
+            <column name="name" value="PAP" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139969" />
+            <column name="name" value="PHS" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139970" />
+            <column name="name" value="Private" />
+        </insert>
+        <insert tableName="ppc_type">
+            <column name="id" valueNumeric="139971" />
+            <column name="name" value="Unknown" />
+        </insert>
+
+        <!-- Added universal test doctor as a formality -->
+        <insert tableName="doctor">
+            <column name="id" valueNumeric="101397" />
+            <column name="name" value="Doc Testerson" />
+            <column name="last_name" type="Testerson" />
+            <column name="first_name" type="Doc" />
+            <column name="middle_name" type="Lappy" />
+            <column name="is_commercial" valueNumeric="1" />
+            <column name="is_clinical" valueNumeric="1" />
+        </insert>
+        
+        <!-- Universal patient -->
+        <insert tableName="patient">
+            <column name="id" valueNumeric="1234" />
+            <column name="last_name" value="Patient4" />
+            <column name="first_name" value="John" />
+            <column name="middle_name" value="Doe" />
+            <column name="ccid" value="TEST_CCID" />
+            <column name="postal_code" value="00001" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="commercial" valueNumeric="1" />
+            <column name="clinical" valueNumeric="0" />
+        </insert>
+        <insert tableName="patient">
+            <column name="id" valueNumeric="1235" />
+            <column name="last_name" value="Patient5" />
+            <column name="first_name" value="John" />
+            <column name="middle_name" value="Doe" />
+            <column name="ccid" value="TEST_CCID2" />
+            <column name="postal_code" value="00001" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="commercial" valueNumeric="1" />
+            <column name="clinical" valueNumeric="0" />
+        </insert>
+        <insert tableName="patient">
+            <column name="id" valueNumeric="1236" />
+            <column name="last_name" value="Patient6" />
+            <column name="first_name" value="John" />
+            <column name="middle_name" value="Doe" />
+            <column name="ccid" value="TEST_CCID3" />
+            <column name="postal_code" value="00001" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="commercial" valueNumeric="1" />
+            <column name="clinical" valueNumeric="0" />
+        </insert>
+
+		<!-- clinical patient -->
+        <insert tableName="patient">
+            <column name="id" valueNumeric="9876" />
+            <column name="last_name" value="Clinical" />
+            <column name="first_name" value="John" />
+            <column name="middle_name" value="Doe" />
+            <column name="subject_id" value="subject_1" />
+            <column name="postal_code" value="00001" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="commercial" valueNumeric="0" />
+            <column name="clinical" valueNumeric="1" />
+        </insert>
+        
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1000" />
+            <column name="location_id" valueNumeric="-1000" />
+            <column name="name" value="Apheresis Site -1000" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1000" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1000" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1000" />
+            <column name="organization_rank" valueNumeric="1" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1001" />
+            <column name="location_id" valueNumeric="-1001" />
+            <column name="name" value="Apheresis Site -1001" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1001" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1001" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1001" />
+            <column name="organization_rank" valueNumeric="2" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1002" />
+            <column name="location_id" valueNumeric="-1002" />
+            <column name="name" value="Apheresis Site -1002" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1002" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1002" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1002" />
+            <column name="organization_rank" valueNumeric="3" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1003" />
+            <column name="location_id" valueNumeric="-1003" />
+            <column name="name" value="Apheresis Site -1003" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1003" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1003" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1003" />
+            <column name="organization_rank" valueNumeric="4" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1004" />
+            <column name="location_id" valueNumeric="-1004" />
+            <column name="name" value="Apheresis Site -1004" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1004" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1004" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1004" />
+            <column name="organization_rank" valueNumeric="5" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1005" />
+            <column name="location_id" valueNumeric="-1005" />
+            <column name="name" value="Apheresis Site -1005" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1005" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_apheresis_site">
+            <column name="id" valueNumeric="-1005" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1005" />
+            <column name="organization_rank" valueNumeric="6" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1006" />
+            <column name="location_id" valueNumeric="-1006" />
+            <column name="name" value="Infusion Site -1006" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1006" />
+            <column name="resource_type_id" valueNumeric="3" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_infusion_site">
+            <column name="id" valueNumeric="-1006" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1006" />
+            <column name="organization_rank" valueNumeric="1" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1007" />
+            <column name="location_id" valueNumeric="-1007" />
+            <column name="name" value="Infusion Site -1007" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1007" />
+            <column name="resource_type_id" valueNumeric="3" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_infusion_site">
+            <column name="id" valueNumeric="-1007" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1007" />
+            <column name="organization_rank" valueNumeric="2" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1008" />
+            <column name="location_id" valueNumeric="-1008" />
+            <column name="name" value="Infusion Site -1008" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1008" />
+            <column name="resource_type_id" valueNumeric="3" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_infusion_site">
+            <column name="id" valueNumeric="-1008" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1008" />
+            <column name="organization_rank" valueNumeric="3" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-1009" />
+            <column name="location_id" valueNumeric="-1009" />
+            <column name="name" value="Infusion Site -1009" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1009" />
+            <column name="resource_type_id" valueNumeric="3" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="doctor_infusion_site">
+            <column name="id" valueNumeric="-1009" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="-1009" />
+            <column name="organization_rank" valueNumeric="4" />
+        </insert>
+        
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="1010" />
+            <column name="location_id" valueNumeric="1010" />
+            <column name="name" value="Infusion Site 1010" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="WA" />
+            <column name="postal_code" value="98101" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="1010" />
+            <column name="resource_type_id" valueNumeric="7" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+        
+        <insert tableName="doctor_plant">
+            <column name="id" valueNumeric="1010" />
+            <column name="doctor_id" valueNumeric="101397" />
+            <column name="resource_id" valueNumeric="1010" />
+            <column name="organization_rank" valueNumeric="1" />
+        </insert>
+
+        <insert tableName="geolocation">
+            <column name="id" valueNumeric="-10" />
+            <column name="latitude" valueNumeric="10.22" />
+            <column name="longitude" valueNumeric="32.23234" />
+            <column name="country" value="US" />
+            <column name="postal_code" value="000000" />
+        </insert>
+        
+        <insert tableName="regimen">
+            <column name="id" valueNumeric="9999" />
+            <column name="order_number" valueNumeric="9999" />
+            <column name="status_id" valueNumeric="5" />
+            <column name="patient_id" valueNumeric="1234" />
+            <column name="engine_response" value="SUCCESSFUL" />
+        </insert>
+
+		<insert tableName="regimen">
+			<column name="id" valueNumeric="9998" />
+			<column name="order_number" valueNumeric="9996" />
+			<column name="status_id" valueNumeric="2" />
+			<column name="patient_id" valueNumeric="1234" />
+			<column name="engine_response" value="SUCCESSFUL" />
+		</insert>
+		
+		<insert tableName="regimen">
+			<column name="id" valueNumeric="9997" />
+			<column name="order_number" valueNumeric="9997" />
+			<column name="status_id" valueNumeric="2" />
+			<column name="patient_id" valueNumeric="1236" />
+			<column name="engine_response" value="SUCCESSFUL" />
+		</insert>
+		
+		<insert tableName="regimen">
+			<column name="id" valueNumeric="9996" />
+			<column name="order_number" valueNumeric="9998" />
+			<column name="status_id" valueNumeric="7" />
+			<column name="patient_id" valueNumeric="1235" />
+			<column name="engine_response" value="SUCCESSFUL" />
+		</insert>
+
+       <insert tableName="sales_order_header">
+            <column name="id" valueNumeric="9999" />
+            <column name="order_number" valueNumeric="9999" />
+            <column name="doctor_id" value="101397" />
+            <column name="patient_id" value="1234" />
+        </insert>
+        
+        <insert tableName="sales_order_header">
+            <column name="id" valueNumeric="9996" />
+            <column name="order_number" valueNumeric="9996" />
+            <column name="doctor_id" value="101397" />
+            <column name="patient_id" value="1234" />
+        </insert>
+        
+         <insert tableName="sales_order_header">
+            <column name="id" valueNumeric="9997" />
+            <column name="order_number" valueNumeric="9997" />
+            <column name="doctor_id" value="101397" />
+            <column name="patient_id" value="1236" />
+        </insert>
+        
+        <insert tableName="sales_order_header">
+            <column name="id" valueNumeric="9998" />
+            <column name="order_number" valueNumeric="9998" />
+            <column name="doctor_id" value="101397" />
+            <column name="patient_id" value="1235" />
+        </insert>
+        
+        
+        <!-- test data for find apheresis site view model -->
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-2001" />
+            <column name="location_id" valueNumeric="-2001" />
+            <column name="name" value="Denver Aph1" />
+            <column name="address1" value="1499 Blake St" />
+            <column name="address2" value="Suite #1-K" />
+            <column name="city" value="Denver" />
+            <column name="state" value="CO" />
+            <column name="postal_code" value="80202" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-2001" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-2002" />
+            <column name="location_id" valueNumeric="-2002" />
+            <column name="name" value="Denver Aph2" />
+            <column name="address1" value="2995 Leyden St" />
+            <column name="city" value="Denver" />
+            <column name="state" value="CO" />
+            <column name="postal_code" value="80207" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-2002" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-2003" />
+            <column name="location_id" valueNumeric="-2003" />
+            <column name="name" value="Boulder Community Hospital" />
+            <column name="address1" value="1100 Balsam" />
+            <column name="city" value="Boulder" />
+            <column name="state" value="CO" />
+            <column name="postal_code" value="80304" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-2003" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+        
+        <!-- pretending there exists a Seattle, MT for the find Apheresis Site by city search-->
+        <insert tableName="site_resource">
+            <column name="id" valueNumeric="-2005" />
+            <column name="location_id" valueNumeric="-2005" />
+            <column name="name" value="Apheresis Site -2005" />
+            <column name="address1" value="1234 Lane N" />
+            <column name="address2" value="Suite #321" />
+            <column name="city" value="Seattle" />
+            <column name="state" value="MT" />
+            <column name="postal_code" value="99099" />
+            <column name="country" value="US" />
+            <column name="party_site_id" valueNumeric="-1005" />
+            <column name="resource_type_id" valueNumeric="2" />
+            <column name="location_status" value="ACTIVE" />
+            <column name="resource_status" value="ACTIVE" />
+            <column name="commercial_approved" valueNumeric="1" />
+            <column name="commercial_site" valueNumeric="1" />
+            <column name="clinical_approved" valueNumeric="0" />
+            <column name="clinical_site" valueNumeric="0" />
+        </insert>
+        
+        <!-- geocoding details for zips 80304, 80207, 80202, 80206 -->
+        <insert tableName="geolocation">
+            <column name="id" valueNumeric="-80304" />
+            <column name="latitude" valueNumeric="40.038918" />
+            <column name="longitude" valueNumeric="-105.278479" />
+            <column name="country" value="US" />
+            <column name="postal_code" value="80304" />
+        </insert>
+        <insert tableName="geolocation">
+            <column name="id" valueNumeric="-80207" />
+            <column name="latitude" valueNumeric="39.759445" />
+            <column name="longitude" valueNumeric="-104.919324" />
+            <column name="country" value="US" />
+            <column name="postal_code" value="80207" />
+        </insert>
+        <insert tableName="geolocation">
+            <column name="id" valueNumeric="-80202" />
+            <column name="latitude" valueNumeric="39.748275" />
+            <column name="longitude" valueNumeric="-104.994492" />
+            <column name="country" value="US" />
+            <column name="postal_code" value="80202" />
+        </insert>
+        <insert tableName="geolocation">
+            <column name="id" valueNumeric="-80206" />
+            <column name="latitude" valueNumeric="39.732767" />
+            <column name="longitude" valueNumeric="-104.952849" />
+            <column name="country" value="US" />
+            <column name="postal_code" value="80206" />
+        </insert>
+        
+        <insert tableName="scheduling_parameters">
+        	<column name="id" valueNumeric="1080" />
+            <column name="bags_per_treatment" valueNumeric="3" />
+            <column name="inbound_expiration_time" valueNumeric="1080" />
+            <column name="inbound_expiration_buffer" valueNumeric="45" />
+            <column name="outbound_expiration_time" valueNumeric="1080" />
+            <column name="infusion_to_expiration_time" valueNumeric="120" />
+            <column name="days_between_treatments_target" valueNumeric="14" />
+            <column name="days_between_treatments_min" valueNumeric="13" />
+            <column name="days_between_treatments_max" valueNumeric="105" />
+            <column name="minimum_PAPID_test_duration" valueNumeric="525" />
+            <column name="minimum_workstation_buffer" valueNumeric="1" />
+            <column name="minimum_incubation_buffer" valueNumeric="30" />
+            <column name="maximum_incubation_buffer" valueNumeric="60" />
+            <column name="packaging_finish_time" valueNumeric="150" />
+            <column name="packaging_finish_time_buffer" valueNumeric="15" />
+            <column name="day2_end_to_final_package_buff" valueNumeric="30" />
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="4.2.1" author="thires" context="test">
+		<createTable tableName="reschedule_category_code">
+            <column name="id" type="number">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="varchar(100)" />
+            <column name="display_sequence" type="number"/>
+        </createTable>
+    	<createTable tableName="reschedule_reason_code">
+            <column name="id" type="number">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(100)"></column>
+            <column name="description" type="varchar(100)" />
+            <column name="display_sequence" type="number"/>
+            <column name="category_id" type="number"/>
+    	</createTable>
+    	<createTable tableName="reschedule_event">
+			 <column name="id" type="number">
+			 	<constraints primaryKey="true" nullable="false"/>
+			 </column>
+			 <column name="regimen_id" type="number"/>
+			 <column name="category"  type="varchar(100)"/>
+			 <column name="reason_code"  type="varchar(100)"/>
+			 <column name="created_date" type="date"/>
+			 <column name="regimen_version" type="number"/>
+			 <column name="notes" type="varchar(100)"/>
+    	</createTable>
+    	
+    	<insert tableName="reschedule_category_code">
+    		<column name="id" valueNumeric="1"/>
+            <column name="description" type="Add Treatment" />
+            <column name="display_sequence" valueNumeric="2"/>
+    	</insert>
+    	<insert tableName="reschedule_category_code">
+    		<column name="id" valueNumeric="2"/>
+            <column name="description" type="Cancel / Reschedule" />
+            <column name="display_sequence" valueNumeric="1"/>
+    	</insert>
+    	
+    	<insert tableName="reschedule_reason_code">
+            <column name="id" valueNumeric="1"/>
+            <column name="code" value="Booster"></column>
+            <column name="description" type="Booster Treatment" />
+            <column name="display_sequence" type="1"/>
+            <column name="category_id" type="1"/>
+    	</insert>
+    	<insert tableName="reschedule_reason_code">
+            <column name="id" valueNumeric="2"/>
+            <column name="code" value="APH_NO_SHOW"></column>
+            <column name="description" type="Patient No Show at APH" />
+            <column name="display_sequence" type="1"/>
+		</insert>
+		
+    	<insert tableName="reschedule_event">
+			 <column name="id" valueNumeric="10"/>
+			 <column name="regimen_id" valueNumeric="7894"/>
+			 <column name="category" value="Category 1"/>
+			 <column name="reason_code" value="Code 1"/>
+			 <column name="regimen_version" valueNumeric="5"/>
+			 <column name="notes" value="Notes"/>
+    	</insert>
+    	<insert tableName="reschedule_event">
+			 <column name="id" valueNumeric="11"/>
+			 <column name="regimen_id" valueNumeric="8023"/>
+			 <column name="category" value="Category 1"/>
+			 <column name="reason_code" value="Code 5"/>
+			 <column name="regimen_version" valueNumeric="2"/>
+			 <column name="notes" value="Notes on the reschedule event"/>
+    	</insert>
+    	
+    	<insert tableName="activity_duration_override_grp">
+    		<column name="id" valueNumeric="1" />
+    		<column name="name" value="Test Group" />
+    		<column name="effective_from" valueDate="2014-11-17" />
+    		<column name="effective_to" valueDate="2014-11-24" />
+    		<column name="location_id" valueNumeric="30" />
+    	</insert>
+    	
+    	<insert tableName="activity_duration_override_grp">
+    		<column name="id" valueNumeric="2" />
+    		<column name="name" value="Test Group 2" />
+    		<column name="effective_from" valueDate="2014-12-01" />
+    		<column name="effective_to" valueDate="null" />
+    		<column name="location_id" valueNumeric="40" />
+    	</insert>
+	</changeSet>
+</databaseChangeLog>

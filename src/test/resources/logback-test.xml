@@ -1,0 +1,41 @@
+<!--
+  ~ All information contained herein is, and remains the property of Dendreon
+  ~ Corporation and its suppliers, unless superseded by another license that
+  ~ is explicitly defined.
+  ~
+  ~ Copyright 2012 Dendreon Corporation
+  -->
+
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%level] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="h2-trace-log"
+              class="ch.qos.logback.core.FileAppender">
+        <append>false</append>
+        <file>target/h2.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="h2database" level="debug" additivity="false">
+        <appender-ref ref="h2-trace-log"/>
+    </logger>
+
+    <logger name="liquibase" level="info" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    
+    <logger name="org.hibernate" level="warn" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+</configuration>
