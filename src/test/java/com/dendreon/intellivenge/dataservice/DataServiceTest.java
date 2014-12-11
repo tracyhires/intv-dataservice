@@ -4,6 +4,11 @@ import static org.testng.Assert.assertEquals;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -20,13 +25,21 @@ public class DataServiceTest {
 	DataService service;
 	
 	@Test
-	public void findRecordTest() throws SQLException {
+	public void findRecordTest() throws SQLException, ParseException {
 
 		QueryParameter q = new QueryParameter("id", QueryType.EQ, new Integer(101397));
 		ResultSet recordSet = service.findRecords("doctor", q);
 		recordSet.next();
 		int id = recordSet.getInt("id");
 		assertEquals(id, 101397, "id is same");
+		
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		Date date = format.parse("01/02/1950");
+		q = new QueryParameter("date_of_birth", QueryType.GT, date);
+		recordSet = service.findRecords("patient", q);
+		recordSet.next();
+		id = recordSet.getInt("id");
+		assertEquals(id, 1234, "id is same");
 	}
 
 }

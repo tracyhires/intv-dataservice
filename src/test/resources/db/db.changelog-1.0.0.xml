@@ -425,6 +425,7 @@
             <column name="last_name" value="Patient4" />
             <column name="first_name" value="John" />
             <column name="middle_name" value="Doe" />
+            <column name="date_of_birth" valueDate="1950-01-01" />
             <column name="ccid" value="TEST_CCID" />
             <column name="postal_code" value="00001" />
             <column name="doctor_id" valueNumeric="101397" />

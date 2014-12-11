@@ -50,7 +50,7 @@ public class JDBCDataService implements DataService {
 		return null;
 	}
 
-	public ResultSet findRecords(String[] tableNames, QueryParameter join,
+	public ResultSet findRecords(String[] tableNames, JoinParameter join,
 			QueryParameter[] queryParameters) {
 		// TODO Auto-generated method stub
 		return null;

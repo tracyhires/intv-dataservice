@@ -1,6 +1,7 @@
 package com.dendreon.intellivenge.dataservice;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -55,52 +56,63 @@ public final class OracleQuery {
 				}
 				queryString.append("from" + SPACE);
 				queryString.append(tableName + SPACE);
-				//TODO: JOIN
+/*				if (join != null) {
+					switch(join.getQueryType()) {
+					case INNER_JOIN:
+						//"emp a, dept b WHERE a.deptno = b.deptno(+)"
+						break;
+					case OUTER_JOIN:
+						queryString.append("t1," + SPACE + join.g)
+						break;
+					default:
+						break;
+					}
+				}*/
 				if (parameters.size() > 0) {
 					queryString.append("where" + SPACE);
 					Iterator<QueryParameter> paramIter = parameters.iterator();
-					StringBuffer queryValues = new StringBuffer("values(");
 					while (paramIter.hasNext()) {
 						QueryParameter q = paramIter.next();
+						Object value = q.getValue();
+						if (q.getValue() instanceof Date) {
+							value = new java.sql.Date(((Date)value).getTime());
+						}
 						queryString.append(q.getColumnName() + SPACE);
 						switch(q.getQueryType()) {
 						case EQ:
-							queryString.append("=" + SPACE + q.getValue() + SPACE);
+							queryString.append("=" + SPACE + value + SPACE);
 							break;
 						case GT:
-							queryString.append(">" + SPACE + q.getValue() + SPACE);
+							queryString.append(">" + SPACE + value + SPACE);
 							break;
 						case GTE:
-							queryString.append(">=" + SPACE + q.getValue() + SPACE);
+							queryString.append(">=" + SPACE + value + SPACE);
 							break;
 						case LT:
-							queryString.append("<" + SPACE + q.getValue() + SPACE);
+							queryString.append("<" + SPACE + value + SPACE);
 							break;
 						case LTE:
-							queryString.append("<=" + SPACE + q.getValue() + SPACE);
+							queryString.append("<=" + SPACE + value + SPACE);
 							break;
 						case CONTAINS:
-							queryString.append("contains(" + q.getValue() + ")" + SPACE);
+							queryString.append("contains(" + value + ")" + SPACE);
 							break;
 						case NEQ:
-							queryString.append("!=" + SPACE + q.getValue() + SPACE);
+							queryString.append("!=" + SPACE + value + SPACE);
 							break;
 						case IN:
-							queryString.append("in(" + q.getValue() + ")" + SPACE);
+							queryString.append("in(" + value + ")" + SPACE);
 							break;
+						default:
+							break;	
 						}
-						queryValues.append(q.getValue());
 						if (paramIter.hasNext()) {
 							queryString.append("and" + SPACE);
-							queryValues.append(",");
-						}
-						else {
-							queryValues.append(")");
 						}
 					}
 				}
 			}
-			return queryString.toString() ;
+			return queryString.toString();
 		}
 	}
 }
