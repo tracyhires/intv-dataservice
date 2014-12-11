@@ -10,9 +10,10 @@ public final class OracleQuery {
 	public static class QueryBuilder {
 
 		private final String SPACE = " ";
-		private static String requestedColumns;
-		private static String tableName;
-		private static Set<QueryParameter> parameters;
+		private String requestedColumns;
+		private String tableName;
+		private Set<QueryParameter> parameters;
+		private QueryParameter join;
 
 		public  QueryBuilder() {
 			parameters = new HashSet<QueryParameter>();
@@ -25,6 +26,11 @@ public final class OracleQuery {
 
 		public QueryBuilder addTableName(String aTableName) {
 			tableName = aTableName;
+			return this;
+		}
+		
+		public QueryBuilder addJoin(QueryParameter aJoin) {
+			join = aJoin;
 			return this;
 		}
 
@@ -49,6 +55,7 @@ public final class OracleQuery {
 				}
 				queryString.append("from" + SPACE);
 				queryString.append(tableName + SPACE);
+				//TODO: JOIN
 				if (parameters.size() > 0) {
 					queryString.append("where" + SPACE);
 					Iterator<QueryParameter> paramIter = parameters.iterator();
@@ -73,10 +80,13 @@ public final class OracleQuery {
 							queryString.append("<=" + SPACE + q.getValue() + SPACE);
 							break;
 						case CONTAINS:
-							queryString.append("contains(" + q.getValue() +")" + SPACE);
+							queryString.append("contains(" + q.getValue() + ")" + SPACE);
 							break;
 						case NEQ:
 							queryString.append("!=" + SPACE + q.getValue() + SPACE);
+							break;
+						case IN:
+							queryString.append("in(" + q.getValue() + ")" + SPACE);
 							break;
 						}
 						queryValues.append(q.getValue());

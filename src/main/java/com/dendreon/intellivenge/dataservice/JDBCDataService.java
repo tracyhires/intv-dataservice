@@ -14,7 +14,9 @@ import javax.sql.DataSource;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 
+@Singleton
 public class JDBCDataService implements DataService {
 	
     private Provider<DataSource> dataSourceProvider;

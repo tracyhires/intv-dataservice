@@ -8,7 +8,6 @@ import javax.sql.DataSource;
 
 import com.dendreon.intellivenge.dataservice.DataService;
 import com.dendreon.intellivenge.dataservice.JDBCDataService;
-import com.dendreon.jndi.JndiSources;
 import com.google.inject.PrivateModule;
 import com.google.inject.name.Names;
 
