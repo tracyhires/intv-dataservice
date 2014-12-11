@@ -3,6 +3,7 @@ package com.dendreon.intellivenge.dataservice;
 import static org.testng.Assert.assertEquals;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +32,7 @@ public class DataServiceTest {
 		ResultSet recordSet = service.findRecords("doctor", q);
 		recordSet.next();
 		int id = recordSet.getInt("id");
-		assertEquals(id, 101397, "id is same");
+		assertEquals(id, 101397);
 		
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		Date date = format.parse("01/02/1950");
@@ -39,7 +40,15 @@ public class DataServiceTest {
 		recordSet = service.findRecords("patient", q);
 		recordSet.next();
 		id = recordSet.getInt("id");
-		assertEquals(id, 1234, "id is same");
+		assertEquals(id, 1234);
+	}
+	
+	@Test
+	public void describeTableTest() throws SQLException {
+		
+		ResultSetMetaData meta = service.describeTable("patient");
+		assertEquals(meta.getTableName(1).toLowerCase(), "patient");
+		assertEquals(meta.getColumnCount(), 23);
 	}
 
 }
