@@ -76,7 +76,7 @@ public final class OracleQuery {
 					queryString.append(SPACE);
 					break;
 				case OUTER_JOIN:
-					queryString.append(join.getLeftTableName() + "," + join.getRightTableName());
+					queryString.append(join.getLeftTableName() + "," + join.getRightTableName() + SPACE);
 					queryString.append("where" + SPACE);
 					queryString.append(join.getLeftTableName() + "." + join.getLeftColumnName());
 					queryString.append("=" + join.getRightTableName() + "." + join.getRightColumnName());
@@ -94,6 +94,9 @@ public final class OracleQuery {
 				//in case of outer join
 				if (queryString.indexOf("where") == -1) {
 					queryString.append("where" + SPACE);
+				}
+				else {
+					queryString.append("and" + SPACE);
 				}
 				Iterator<QueryParameter> paramIter = parameters.iterator();
 				int counter = 1;

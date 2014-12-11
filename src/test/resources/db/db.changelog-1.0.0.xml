@@ -419,6 +419,17 @@
             <column name="is_clinical" valueNumeric="1" />
         </insert>
         
+        <!-- Added a second universal test doctor as a formality -->
+        <insert tableName="doctor">
+            <column name="id" valueNumeric="101398" />
+            <column name="name" value="Doc2 Testerson 2" />
+            <column name="last_name" type="Testerson 2" />
+            <column name="first_name" type="Doc2" />
+            <column name="middle_name" type="Loppy" />
+            <column name="is_commercial" valueNumeric="1" />
+            <column name="is_clinical" valueNumeric="1" />
+        </insert>
+        
         <!-- Universal patient -->
         <insert tableName="patient">
             <column name="id" valueNumeric="1234" />

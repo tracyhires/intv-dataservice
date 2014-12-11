@@ -7,7 +7,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import com.dendreon.intellivenge.dataservice.DataService;
-import com.dendreon.intellivenge.dataservice.JDBCDataService;
+import com.dendreon.intellivenge.dataservice.OracleDataService;
 import com.google.inject.PrivateModule;
 import com.google.inject.name.Names;
 
@@ -24,7 +24,7 @@ public class JDBCDataServiceModule extends PrivateModule {
 						"java:/comp/env/jdbc/xxsap"));
 		expose(DataSource.class).annotatedWith(Names.named("XxsapJndi"));
 		
-		bind(DataService.class).to(JDBCDataService.class);
+		bind(DataService.class).to(OracleDataService.class);
 		expose(DataService.class);
 	}
 }

@@ -21,12 +21,12 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 @Singleton
-public class JDBCDataService implements DataService {
+public class OracleDataService implements DataService {
 
 	private Provider<DataSource> dataSourceProvider;
 
 	@Inject
-	public JDBCDataService(@Named("XxsapJndi") Provider<DataSource> aDataSourceProvider) {
+	public OracleDataService(@Named("XxsapJndi") Provider<DataSource> aDataSourceProvider) {
 		dataSourceProvider = aDataSourceProvider;
 	}
 	
