@@ -1,6 +1,7 @@
 package com.dendreon.intellivenge.dataservice;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -29,19 +30,19 @@ public class JDBCDataService implements DataService {
 	public ResultSet findRecords(String tableName,
 			QueryParameter... queryParameters) {
 		
-		String queryString = new OracleQuery.QueryBuilder()
-		.addTableName(tableName)
-		.addParameters(Arrays.asList(queryParameters))
-		.build();
-		
-		LoggerFactory.getLogger(getClass()).info(queryString);
-		
 		DataSource dataSource = dataSourceProvider.get();
 		try {
 			Connection connection = dataSource.getConnection();
-			Statement statement = connection.createStatement();
-			statement.execute(queryString);
-			return statement.getResultSet();
+			
+			PreparedStatement pStatement = new OracleQuery.QueryBuilder(connection)
+			.addTableName(tableName)
+			.addParameters(Arrays.asList(queryParameters))
+			.build();
+			
+			LoggerFactory.getLogger(getClass()).info(pStatement.toString());
+			
+			pStatement.execute();
+			return pStatement.getResultSet();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

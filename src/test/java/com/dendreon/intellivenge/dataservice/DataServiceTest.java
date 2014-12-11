@@ -35,7 +35,7 @@ public class DataServiceTest {
 		
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		Date date = format.parse("01/02/1950");
-		q = new QueryParameter("date_of_birth", QueryType.GT, date);
+		q = new QueryParameter("date_of_birth", QueryType.LT, date);
 		recordSet = service.findRecords("patient", q);
 		recordSet.next();
 		id = recordSet.getInt("id");
