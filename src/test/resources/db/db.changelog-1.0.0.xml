@@ -422,8 +422,8 @@
         <!-- Added a second universal test doctor as a formality -->
         <insert tableName="doctor">
             <column name="id" valueNumeric="101398" />
-            <column name="name" value="Doc2 Testerson 2" />
-            <column name="last_name" type="Testerson 2" />
+            <column name="name" value="Doc2 Testerson2" />
+            <column name="last_name" type="Testerson2" />
             <column name="first_name" type="Doc2" />
             <column name="middle_name" type="Loppy" />
             <column name="is_commercial" valueNumeric="1" />
@@ -462,6 +462,17 @@
             <column name="ccid" value="TEST_CCID3" />
             <column name="postal_code" value="00001" />
             <column name="doctor_id" valueNumeric="101397" />
+            <column name="commercial" valueNumeric="1" />
+            <column name="clinical" valueNumeric="0" />
+        </insert>
+        <insert tableName="patient">
+            <column name="id" valueNumeric="1237" />
+            <column name="last_name" value="Patient6" />
+            <column name="first_name" value="John" />
+            <column name="middle_name" value="Doe" />
+            <column name="ccid" value="TEST_CCID3" />
+            <column name="postal_code" value="00001" />
+            <column name="doctor_id" valueNumeric="101398" />
             <column name="commercial" valueNumeric="1" />
             <column name="clinical" valueNumeric="0" />
         </insert>

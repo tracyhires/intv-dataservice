@@ -115,8 +115,6 @@
 						<!-- JNDI name that points to the database -->
 						<test.testdb.jndiname>java:/comp/env/jdbc/xxsap</test.testdb.jndiname>
 						<test.testdb.schemaname>XXSAP</test.testdb.schemaname>
-						<!-- Hibernate Dialect to run the Hibernate with during unit tests -->
-						<hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

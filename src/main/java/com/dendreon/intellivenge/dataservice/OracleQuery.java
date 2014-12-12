@@ -1,10 +1,12 @@
 package com.dendreon.intellivenge.dataservice;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public final class OracleQuery {
 			tableName = aTableName;
 			return this;
 		}
-		
+
 		public QueryBuilder addJoin(JoinParameter aJoin) {
 			join = aJoin;
 			return this;
@@ -102,78 +104,115 @@ public final class OracleQuery {
 				int counter = 1;
 				while (paramIter.hasNext()) {
 					QueryParameter q = paramIter.next();
-					queryString.append(q.getColumnName() + SPACE);
 					switch(q.getQueryType()) {
 					case EQ:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append("=" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case GT:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append(">" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case GTE:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append(">=" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case LT:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append("<" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case LTE:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append("<=" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case NEQ:
+						queryString.append(q.getColumnName() + SPACE);
 						queryString.append("!=" + SPHS);
+						preparedValues.put(counter++, q.getValue());
 						break;
 					case CONTAINS:
-						queryString.append("contains(" + PH + ")" + SPACE);
+						Object stringValue = q.getValue();
+						if (stringValue instanceof String) {
+							queryString.append("lower(" + q.getColumnName() + ")" + SPACE);
+							queryString.append("like" + SPHS);
+							preparedValues.put(counter++, "%" + ((String)stringValue).toLowerCase() + "%");
+						}
 						break;
 					case IN:
-						queryString.append("in(" + PH + ")" + SPACE);
-						break;
-					default:
+						Object collectionValue = q.getValue();
+						Iterator<?> inIterator = null;
+						if (collectionValue instanceof Collection) {
+							inIterator = ((Collection<?>)collectionValue).iterator();
+						}
+						else if (collectionValue.getClass().isArray()) {
+							inIterator = Arrays.asList(((Object[])collectionValue)).iterator();
+						}
+						if (inIterator != null) {
+							queryString.append(q.getColumnName() + SPACE);
+							queryString.append("in (");
+							while (inIterator.hasNext()) {
+								preparedValues.put(counter++, inIterator.next());
+								queryString.append(PH);
+								if (inIterator.hasNext()) {
+									queryString.append(",");
+								}
+								else {
+									queryString.append(")");
+								}
+							}
+						}
 						break;	
 					}
 					if (paramIter.hasNext()) {
 						queryString.append("and" + SPACE);
 					}
-					preparedValues.put(counter++, q.getValue());
 				}
 
 				// create statement and add values
 				pStatement = connection.prepareStatement(queryString.toString());
 				for (Integer index : preparedValues.keySet()) {
-					Object value = preparedValues.get(index);
-					if (value instanceof Date) {
-						pStatement.setDate(index.intValue(), new java.sql.Date((((Date)value)).getTime()));
-					}
-					if (value instanceof String) {
-						pStatement.setString(index.intValue(), (String)value);
-					}
-					if (value instanceof Integer) {
-						pStatement.setInt(index.intValue(), ((Integer) value).intValue());
-					}
-					if (value instanceof Double) {
-						pStatement.setDouble(index.intValue(), ((Double) value).doubleValue());
-					}
-					if (value instanceof Long) {
-						pStatement.setLong(index.intValue(), ((Long) value).longValue());
-					}
-					if (value instanceof Boolean) {
-						pStatement.setBoolean(index.intValue(), (Boolean)value);
-					}
-					if (value instanceof java.sql.Date) {
-						pStatement.setDate(index.intValue(), (java.sql.Date)value);
-					}
-					if (value instanceof Time) {
-						pStatement.setTime(index.intValue(), (Time)value);
-					}
-					if (value instanceof Timestamp) {
-						pStatement.setTimestamp(index.intValue(), (Timestamp)value);
-					}
-					else {
-						pStatement.setObject(index.intValue(), value);
-					}
+					setValue(pStatement, index, preparedValues.get(index));
 				}
 			}
 			return pStatement;
+		}
+
+		private void setValue(PreparedStatement aPreparedStatement, int index, Object aValue) throws SQLException {
+			if (aValue instanceof Date) {
+				aPreparedStatement.setDate(index, new java.sql.Date((((Date)aValue)).getTime()));
+			}
+			if (aValue instanceof String) {
+				aPreparedStatement.setString(index, (String)aValue);
+			}
+			if (aValue instanceof Integer) {
+				aPreparedStatement.setInt(index, ((Integer) aValue).intValue());
+			}
+			if (aValue instanceof Double) {
+				aPreparedStatement.setDouble(index, ((Double) aValue).doubleValue());
+			}
+			if (aValue instanceof Long) {
+				aPreparedStatement.setLong(index, ((Long) aValue).longValue());
+			}
+			if (aValue instanceof Boolean) {
+				aPreparedStatement.setBoolean(index, (Boolean)aValue);
+			}
+			if (aValue instanceof java.sql.Date) {
+				aPreparedStatement.setDate(index, (java.sql.Date)aValue);
+			}
+			if (aValue instanceof Time) {
+				aPreparedStatement.setTime(index, (Time)aValue);
+			}
+			if (aValue instanceof Timestamp) {
+				aPreparedStatement.setTimestamp(index, (Timestamp)aValue);
+			}
+			else {
+				aPreparedStatement.setObject(index, aValue);
+			}
 		}
 	}
 }
