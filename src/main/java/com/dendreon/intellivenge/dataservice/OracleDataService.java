@@ -7,6 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,7 +31,7 @@ public class OracleDataService implements DataService {
 		dataSourceProvider = aDataSourceProvider;
 	}
 	
-	private ResultSet findRecords(String aTableName, JoinParameter aJoin, QueryParameter... queryParameters) {
+	private ResultSet findRecords(String aTableName, Collection<JoinParameter> aJoins, QueryParameter... queryParameters) {
 		CachedRowSet vRetVal = null;
 
 		DataSource dataSource = dataSourceProvider.get();
@@ -43,8 +44,8 @@ public class OracleDataService implements DataService {
 					if (aTableName != null) {
 						qb.addTableName(aTableName);
 					}
-					if (aJoin != null) {
-						qb.addJoin(aJoin);
+					if (aJoins != null) {
+						qb.addJoin(aJoins);
 					}
 					PreparedStatement pStatement = qb.build();
 					try {
@@ -95,9 +96,9 @@ public class OracleDataService implements DataService {
 		return findRecords(tableName, null, queryParameters);
 	}
 
-	public ResultSet findRecords(JoinParameter join,
+	public ResultSet findRecords(Collection<JoinParameter> joins,
 			QueryParameter... queryParameters) {
-		return findRecords(null, join, queryParameters);
+		return findRecords(null, joins, queryParameters);
 	}
 
 	public ResultSetMetaData describeTable(String tablename) {

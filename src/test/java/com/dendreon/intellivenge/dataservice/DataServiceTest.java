@@ -137,8 +137,10 @@ public class DataServiceTest {
 	@Test
 	public void findRecordInnerJoinTest() throws SQLException {
 		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.INNER_JOIN);
+		List<JoinParameter> joins = new ArrayList<JoinParameter>();
+		joins.add(j);
 		QueryParameter q = new QueryParameter("doctor.id", QueryType.EQ, new Integer(101397));
-		ResultSet resultSet = service.findRecords(j, q);
+		ResultSet resultSet = service.findRecords(joins, q);
 		resultSet.next();
 		int doctorId = resultSet.getInt("doctor_id");
 		String doctorName = resultSet.getString("name");
@@ -156,8 +158,10 @@ public class DataServiceTest {
 	@Test
 	public void findRecordOuterJoinTest() throws SQLException {
 		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.OUTER_JOIN);
+		List<JoinParameter> joins = new ArrayList<JoinParameter>();
+		joins.add(j);
 		QueryParameter q = new QueryParameter("doctor.is_clinical", QueryType.EQ, new Boolean(true));
-		ResultSet resultSet = service.findRecords(j, q);
+		ResultSet resultSet = service.findRecords(joins, q);
 		resultSet.next();
 		int doctorId = resultSet.getInt("doctor_id");
 		String doctorName = resultSet.getString("name");

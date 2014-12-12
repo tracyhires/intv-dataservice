@@ -2,12 +2,13 @@ package com.dendreon.intellivenge.dataservice;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.Collection;
 
 public interface DataService {
 	
 	ResultSet findRecords(String tableName, QueryParameter...queryParameters);
 
-	ResultSet findRecords(JoinParameter join, QueryParameter... queryParameters);
+	ResultSet findRecords(Collection<JoinParameter> joins, QueryParameter... queryParameters);
 	
 	ResultSetMetaData describeTable(String tablename);
 }
