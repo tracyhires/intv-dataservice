@@ -30,7 +30,7 @@ public class DataServiceTest {
 	DataService service;
 	
 	@Test
-	public void findRecordSimpleTest() throws SQLException, ParseException {
+	public void findRecordSimpleTest() throws SQLException {
 
 		QueryParameter q = new QueryParameter("id", QueryType.EQ, new Long(101397));
 		ResultSet resultSet = service.findRecords("doctor", q);
@@ -40,7 +40,7 @@ public class DataServiceTest {
 	}
 	
 	@Test
-	public void findRecordDateTest() throws ParseException, SQLException {
+	public void findRecordDateTest() throws SQLException, ParseException {
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		Date date = format.parse("01/02/1950");
 		QueryParameter q = new QueryParameter("date_of_birth", QueryType.LT, date);
@@ -85,7 +85,7 @@ public class DataServiceTest {
 	}
 	
 	@Test
-	public void findRecordStringTest() throws ParseException, SQLException {
+	public void findRecordStringTest() throws SQLException {
 		QueryParameter q = new QueryParameter("name", QueryType.EQ, "Doc Testerson");
 		ResultSet resultSet = service.findRecords("doctor", q);
 		resultSet.next();
@@ -203,7 +203,7 @@ public class DataServiceTest {
 	}
 	
 	@Test
-	public void findRecordSqlDateTest() throws ParseException, SQLException {
+	public void findRecordSqlDateTest() throws SQLException, ParseException {
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 		Date date = format.parse("01/02/1950");
 		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -222,12 +222,21 @@ public class DataServiceTest {
 	}
 	
 	@Test
-	public void findRecordDoubleTest() throws ParseException, SQLException {
+	public void findRecordDoubleTest() throws SQLException {
 		QueryParameter q = new QueryParameter("latitude", QueryType.EQ, 10.22);
 		ResultSet resultSet = service.findRecords("geolocation", q);
 		resultSet.next();
 		int id = resultSet.getInt("id");
 		assertEquals(id, -10);
+	}
+	
+	@Test
+	public void findRecordAllTest() throws SQLException {
+		ResultSet resultSet = service.findRecords("regimen", new QueryParameter[] {});
+
+		resultSet.last();
+	    int size = resultSet.getRow();
+	    assertEquals(size, 4);
 	}
 	
 	@Test
