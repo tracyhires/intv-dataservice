@@ -68,7 +68,7 @@ public final class OracleQuery {
 				while (stringIterator.hasNext()) {
 					queryString.append(stringIterator.next());
 					if (stringIterator.hasNext()) {
-						queryString.append(",");
+						queryString.append("," + SPACE);
 					}
 					else {
 						queryString.append(SPACE);

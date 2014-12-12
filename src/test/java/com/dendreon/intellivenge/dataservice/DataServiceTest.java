@@ -147,6 +147,29 @@ public class DataServiceTest {
 	}
 	
 	@Test
+	public void findRecordInnerJoinColumnsTest() throws SQLException {
+		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.INNER_JOIN);
+		List<JoinParameter> joins = new ArrayList<JoinParameter>();
+		joins.add(j);
+		String[] columns = {"patient.id", "patient.gender", "patient.ccid", "patient.doctor_id", "doctor.id as doctor$id", "doctor.name", "doctor.is_clinical"};
+		QueryParameter q = new QueryParameter("doctor.id", QueryType.EQ, new Integer(101397));
+		ResultSet resultSet = service.findRecords(columns, joins, q);
+		printResultSet(resultSet);
+		resultSet.next();
+		int doctorId = resultSet.getInt("doctor$id");
+		String doctorName = resultSet.getString("name");
+		boolean doctorIsClinical = resultSet.getBoolean("is_clinical");
+
+		assertEquals(doctorId, 101397);
+		assertEquals(doctorName, "Doc Testerson");
+		assertEquals(doctorIsClinical, true);
+		
+		resultSet.last();
+	    int size = resultSet.getRow();
+	    assertEquals(size, 4);
+	}
+	
+	@Test
 	public void findRecordInnerJoinTest() throws SQLException {
 		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.INNER_JOIN);
 		List<JoinParameter> joins = new ArrayList<JoinParameter>();
@@ -256,6 +279,21 @@ public class DataServiceTest {
 		ResultSetMetaData meta = service.describeTable("patient");
 		assertEquals(meta.getTableName(1).toLowerCase(), "patient");
 		assertEquals(meta.getColumnCount(), 23);
+	}
+	
+	private void printResultSet(ResultSet aResultSet) throws SQLException {
+		ResultSetMetaData rsMetaData = aResultSet.getMetaData();
+		int columnsNumber = rsMetaData.getColumnCount();
+		while (aResultSet.next()) {
+			for (int i = 1; i <= columnsNumber; i++) {
+				if (i > 1) System.out.print(",  ");
+				String columnValue = aResultSet.getString(i);
+				System.out.print(columnValue + " " + rsMetaData.getColumnName(i));
+			}
+			System.out.println("");
+		}
+
+		aResultSet.first();
 	}
 
 }
