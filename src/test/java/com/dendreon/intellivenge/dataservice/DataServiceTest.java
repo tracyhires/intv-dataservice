@@ -136,6 +136,17 @@ public class DataServiceTest {
 	}
 	
 	@Test
+	public void findRecordNEColumnsTest() throws SQLException {
+		QueryParameter q = new QueryParameter("id", QueryType.NEQ, new Integer(1235));
+		String[] columns = {"id", "doctor_id", "gender", "ccid", "date_of_birth"};
+		ResultSet resultSet = service.findRecords("patient", columns, q);
+		resultSet.next();
+		resultSet.last();
+	    int size = resultSet.getRow();
+	    assertEquals(size, 4);
+	}
+	
+	@Test
 	public void findRecordInnerJoinTest() throws SQLException {
 		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.INNER_JOIN);
 		List<JoinParameter> joins = new ArrayList<JoinParameter>();

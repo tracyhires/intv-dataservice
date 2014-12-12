@@ -10,5 +10,9 @@ public interface DataService {
 
 	ResultSet findRecords(Collection<JoinParameter> joins, QueryParameter... queryParameters);
 	
+	ResultSet findRecords(String tableName, String[] aColumns, QueryParameter...queryParameters);
+
+	ResultSet findRecords(String[] aColumns, Collection<JoinParameter> joins, QueryParameter... queryParameters);
+	
 	ResultSetMetaData describeTable(String tablename);
 }

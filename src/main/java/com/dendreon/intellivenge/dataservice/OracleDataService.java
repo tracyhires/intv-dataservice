@@ -31,7 +31,7 @@ public class OracleDataService implements DataService {
 		dataSourceProvider = aDataSourceProvider;
 	}
 	
-	private ResultSet findRecords(String aTableName, Collection<JoinParameter> aJoins, QueryParameter... queryParameters) {
+	private ResultSet findRecords(String aTableName, String[] aColumns, Collection<JoinParameter> aJoins, QueryParameter... queryParameters) {
 		CachedRowSet vRetVal = null;
 
 		DataSource dataSource = dataSourceProvider.get();
@@ -46,6 +46,9 @@ public class OracleDataService implements DataService {
 					}
 					if (aJoins != null) {
 						qb.addJoin(aJoins);
+					}
+					if (aColumns != null) {
+						qb.addRequestedColumns(aColumns);
 					}
 					PreparedStatement pStatement = qb.build();
 					try {
@@ -92,13 +95,22 @@ public class OracleDataService implements DataService {
 		return vRetVal;
 	}
 
-	public ResultSet findRecords(String tableName, QueryParameter... queryParameters) {
-		return findRecords(tableName, null, queryParameters);
+	public ResultSet findRecords(String tableName, String[] aColumns, QueryParameter... queryParameters) {
+		return findRecords(tableName, aColumns, null, queryParameters);
 	}
 
-	public ResultSet findRecords(Collection<JoinParameter> joins,
+	public ResultSet findRecords(String[] aColumns, Collection<JoinParameter> joins,
 			QueryParameter... queryParameters) {
-		return findRecords(null, joins, queryParameters);
+		return findRecords(null, aColumns, joins, queryParameters);
+	}
+	
+
+	public ResultSet findRecords(String tableName, QueryParameter... queryParameters) {
+		return findRecords(tableName, null, null, queryParameters);
+	}
+
+	public ResultSet findRecords(Collection<JoinParameter> joins, QueryParameter... queryParameters) {
+		return findRecords(null, null, joins, queryParameters);
 	}
 
 	public ResultSetMetaData describeTable(String tablename) {
@@ -140,5 +152,4 @@ public class OracleDataService implements DataService {
 		}
 		return vRetVal;
 	}
-
 }

@@ -22,7 +22,7 @@ public final class OracleQuery {
 		private final String PH = "?";
 		private final String SPHS = " ? ";
 		private final Connection connection;
-		private String requestedColumns;
+		private String[] requestedColumns;
 		private String tableName;
 		private Set<QueryParameter> parameters;
 		private Collection<JoinParameter> joins;
@@ -32,8 +32,8 @@ public final class OracleQuery {
 			parameters = new HashSet<QueryParameter>();
 		}
 
-		public QueryBuilder addRequestedColumns(String aColumnCSV) {
-			requestedColumns = aColumnCSV;
+		public QueryBuilder addRequestedColumns(String[] aColumns) {
+			requestedColumns = aColumns;
 			return this;
 		}
 
@@ -64,7 +64,16 @@ public final class OracleQuery {
 
 			queryString.append("select" + SPACE);
 			if (requestedColumns != null) {
-				queryString.append(requestedColumns + SPACE);
+				Iterator<String> stringIterator = Arrays.asList(requestedColumns).iterator();
+				while (stringIterator.hasNext()) {
+					queryString.append(stringIterator.next());
+					if (stringIterator.hasNext()) {
+						queryString.append(",");
+					}
+					else {
+						queryString.append(SPACE);
+					}
+				}
 			} else {
 				queryString.append("*" + SPACE);
 			}
