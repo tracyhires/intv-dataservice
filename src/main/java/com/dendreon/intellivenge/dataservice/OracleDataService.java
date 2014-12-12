@@ -103,7 +103,7 @@ public class OracleDataService implements DataService {
 
 	public ResultSetMetaData describeTable(String tablename) {
 		ResultSetMetaData vRetVal = null;
-		String sql = "select top 1 * from " + tablename;
+		String sql = "select * from " + tablename + " where rownum=1";
 		DataSource dataSource = dataSourceProvider.get();
 		if (dataSource != null) {
 			try {

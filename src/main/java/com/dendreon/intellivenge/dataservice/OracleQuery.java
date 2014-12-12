@@ -104,6 +104,10 @@ public final class OracleQuery {
 					whereBuffer.append("(+)" + SPACE);
 					break;
 				}
+				if (joinIterator.hasNext()) {
+					whereBuffer.append("and" + SPACE);
+				}
+				
 			}
 			Iterator<String> tableNamesIterator = tableNames.iterator();
 			while (tableNamesIterator.hasNext()) {
@@ -121,7 +125,7 @@ public final class OracleQuery {
 		
 		private Map<Integer,Object> addParameters(StringBuffer aQueryString) {
 			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
-			//in case of outer join
+			//in case of join
 			if (aQueryString.indexOf("where") == -1) {
 				aQueryString.append("where" + SPACE);
 			}

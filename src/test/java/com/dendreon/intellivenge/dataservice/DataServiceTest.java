@@ -6,6 +6,7 @@ import static org.testng.Assert.assertTrue;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class DataServiceTest {
 	@Test
 	public void findRecordSimpleTest() throws SQLException, ParseException {
 
-		QueryParameter q = new QueryParameter("id", QueryType.EQ, new Integer(101397));
+		QueryParameter q = new QueryParameter("id", QueryType.EQ, new Long(101397));
 		ResultSet resultSet = service.findRecords("doctor", q);
 		resultSet.next();
 		int id = resultSet.getInt("id");
@@ -174,6 +175,55 @@ public class DataServiceTest {
 		resultSet.last();
 	    int size = resultSet.getRow();
 	    assertEquals(size, 5);
+	}
+	
+	@Test
+	public void findRecordMultpleJoinTest() throws SQLException {
+		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.OUTER_JOIN);
+		List<JoinParameter> joins = new ArrayList<JoinParameter>();
+		joins.add(j);
+		QueryParameter q = new QueryParameter("doctor.is_clinical", QueryType.EQ, new Boolean(true));
+		ResultSet resultSet = service.findRecords(joins, q);
+		resultSet.next();
+		int doctorId = resultSet.getInt("doctor_id");
+		String doctorName = resultSet.getString("name");
+		boolean doctorIsClinical = resultSet.getBoolean("is_clinical");
+
+		assertTrue((doctorId == 101397) || (doctorId == 101398));
+		assertTrue(doctorName.equalsIgnoreCase("Doc Testerson") || doctorName.equalsIgnoreCase("Doc2 Testerson2"));
+		assertEquals(doctorIsClinical, true);
+		
+		resultSet.last();
+	    int size = resultSet.getRow();
+	    assertEquals(size, 5);
+	}
+	
+	@Test
+	public void findRecordSqlDateTest() throws ParseException, SQLException {
+		DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+		Date date = format.parse("01/02/1950");
+		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+		QueryParameter q = new QueryParameter("date_of_birth", QueryType.LT, sqlDate);
+		ResultSet resultSet = service.findRecords("patient", q);
+		resultSet.next();
+		int id = resultSet.getInt("id");
+		assertEquals(id, 1234);
+		
+		Timestamp timeStamp = new Timestamp(date.getTime());
+		q = new QueryParameter("date_of_birth", QueryType.LT, timeStamp);
+		resultSet = service.findRecords("patient", q);
+		resultSet.next();
+		id = resultSet.getInt("id");
+		assertEquals(id, 1234);
+	}
+	
+	@Test
+	public void findRecordDoubleTest() throws ParseException, SQLException {
+		QueryParameter q = new QueryParameter("latitude", QueryType.EQ, 10.22);
+		ResultSet resultSet = service.findRecords("geolocation", q);
+		resultSet.next();
+		int id = resultSet.getInt("id");
+		assertEquals(id, -10);
 	}
 	
 	@Test
