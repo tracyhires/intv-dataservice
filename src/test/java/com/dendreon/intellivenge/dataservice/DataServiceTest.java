@@ -179,23 +179,27 @@ public class DataServiceTest {
 	
 	@Test
 	public void findRecordMultpleJoinTest() throws SQLException {
-		JoinParameter j = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.OUTER_JOIN);
+		JoinParameter j1 = new JoinParameter("patient", "doctor", "doctor_id", "id", JoinType.OUTER_JOIN);
+		JoinParameter j2 = new JoinParameter("regimen", "patient", "patient_id", "id", JoinType.INNER_JOIN);
 		List<JoinParameter> joins = new ArrayList<JoinParameter>();
-		joins.add(j);
+		joins.add(j1);
+		joins.add(j2);
 		QueryParameter q = new QueryParameter("doctor.is_clinical", QueryType.EQ, new Boolean(true));
 		ResultSet resultSet = service.findRecords(joins, q);
 		resultSet.next();
 		int doctorId = resultSet.getInt("doctor_id");
 		String doctorName = resultSet.getString("name");
 		boolean doctorIsClinical = resultSet.getBoolean("is_clinical");
+		int orderNumber = resultSet.getInt("order_number");
 
 		assertTrue((doctorId == 101397) || (doctorId == 101398));
 		assertTrue(doctorName.equalsIgnoreCase("Doc Testerson") || doctorName.equalsIgnoreCase("Doc2 Testerson2"));
 		assertEquals(doctorIsClinical, true);
+		assertTrue(orderNumber == 9999 || orderNumber == 9998 || orderNumber == 9997 || orderNumber == 9996);
 		
 		resultSet.last();
 	    int size = resultSet.getRow();
-	    assertEquals(size, 5);
+	    assertEquals(size, 4);
 	}
 	
 	@Test
