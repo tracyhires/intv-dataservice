@@ -510,12 +510,12 @@
             <column name="clinical_site" valueNumeric="0" />
         </insert>
 
-        <insert tableName="doctor_apheresis_site">
+        <!-- <insert tableName="doctor_apheresis_site">
             <column name="id" valueNumeric="-1000" />
             <column name="doctor_id" valueNumeric="101397" />
             <column name="resource_id" valueNumeric="-1000" />
             <column name="organization_rank" valueNumeric="1" />
-        </insert>
+        </insert> -->
 
         <insert tableName="site_resource">
             <column name="id" valueNumeric="-1001" />

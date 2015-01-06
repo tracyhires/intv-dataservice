@@ -1,6 +1,7 @@
 package com.dendreon.intellivenge.dataservice;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
@@ -279,6 +281,93 @@ public class DataServiceTest {
 		ResultSetMetaData meta = service.describeTable("patient");
 		assertEquals(meta.getTableName(1).toLowerCase(), "patient");
 		assertEquals(meta.getColumnCount(), 23);
+	}
+	
+	@Test
+	public void insertTest() throws SQLException, DataServiceException {
+		UpdateParameter insert = new UpdateParameter("doctor_apheresis_site");
+		insert.getColumnValuePairs().put("id", "seq_doctor_resource_id.NEXTVAL");
+		insert.getColumnValuePairs().put("doctor_id", 101399);
+		insert.getColumnValuePairs().put("resource_id", -1000);
+		insert.getColumnValuePairs().put("organization_rank", 4);
+		
+		UpdateParameter insert2 = new UpdateParameter("doctor_apheresis_site");
+		insert2.getColumnValuePairs().put("id", "seq_doctor_resource_id.NEXTVAL");
+		insert2.getColumnValuePairs().put("doctor_id", 101399);
+		insert2.getColumnValuePairs().put("resource_id", -1010);
+		insert2.getColumnValuePairs().put("organization_rank", 5);
+		
+		Integer[] newItems = service.insertRecords(new UpdateParameter[] {insert, insert2});
+		
+		QueryParameter q = new QueryParameter("id", QueryType.IN, newItems);
+		ResultSet resultSet = service.findRecords("doctor_apheresis_site", q);
+		resultSet.next();
+		int did = resultSet.getInt("doctor_id");
+		assertEquals(did, 101399);
+		int rid = resultSet.getInt("resource_id");
+		assertTrue(rid == -1000 || rid == -1010);
+		int rank = resultSet.getInt("organization_rank");
+		assertTrue(rank == 4 || rank == 5);
+		
+		resultSet.last();
+	    int size = resultSet.getRow();
+	    assertEquals(size, 2);	
+	}
+	
+	@Test
+	public void updateTest() throws SQLException, DataServiceException {
+		
+		UpdateParameter insert = new UpdateParameter("doctor_apheresis_site");
+		insert.getColumnValuePairs().put("id", "seq_doctor_resource_id.NEXTVAL");
+		insert.getColumnValuePairs().put("doctor_id", 101397);
+		insert.getColumnValuePairs().put("resource_id", -1020);
+		insert.getColumnValuePairs().put("organization_rank", 1);
+		service.insertRecords(new UpdateParameter[] {insert});
+		
+		UpdateParameter update = new UpdateParameter("doctor_apheresis_site");
+		update.getColumnValuePairs().put("doctor_id", 101397);
+		update.getColumnValuePairs().put("resource_id", -1020);
+		update.getColumnValuePairs().put("organization_rank", 9);
+		update.getQueryParameters().add(new QueryParameter("doctor_id", QueryType.EQ, 101397));
+		update.getQueryParameters().add(new QueryParameter("resource_id", QueryType.EQ, -1020));
+		
+		service.updateRecords(new UpdateParameter[] {update});
+		
+		QueryParameter q = new QueryParameter("doctor_id", QueryType.EQ, 101397);
+		QueryParameter q2 = new QueryParameter("resource_id", QueryType.EQ, -1020);
+		ResultSet resultSet = service.findRecords("doctor_apheresis_site", q, q2);
+		resultSet.next();
+		int did = resultSet.getInt("doctor_id");
+		assertEquals(did, 101397);
+		int rid = resultSet.getInt("resource_id");
+		assertEquals(rid, -1020);
+		int rank = resultSet.getInt("organization_rank");
+		assertEquals(rank, 9);
+	}
+	
+	@Test
+	public void deleteTest() throws SQLException, DataServiceException {
+		
+		UpdateParameter insert = new UpdateParameter("doctor_apheresis_site");
+		insert.getColumnValuePairs().put("id", "seq_doctor_resource_id.NEXTVAL");
+		insert.getColumnValuePairs().put("doctor_id", 101397);
+		insert.getColumnValuePairs().put("resource_id", -1030);
+		insert.getColumnValuePairs().put("organization_rank", 5);
+		service.insertRecords(new UpdateParameter[] {insert});
+		
+		UpdateParameter delete = new UpdateParameter("doctor_apheresis_site");
+		delete.getQueryParameters().add(new QueryParameter("doctor_id", QueryType.EQ, 101397));
+		delete.getQueryParameters().add(new QueryParameter("resource_id", QueryType.EQ, -1030));
+		delete.getQueryParameters().add(new QueryParameter("organization_rank", QueryType.EQ, 5));
+		
+		service.deleteRecords(new UpdateParameter[] {delete});
+		
+		QueryParameter q = new QueryParameter("doctor_id", QueryType.EQ, 101397);
+		QueryParameter q2 = new QueryParameter("resource_id", QueryType.EQ, -1030);
+		QueryParameter q3 = new QueryParameter("organization_rank", QueryType.EQ, 5);
+		ResultSet resultSet = service.findRecords("doctor_apheresis_site", q, q2, q3);
+		
+		assertFalse(resultSet.next());
 	}
 	
 	private void printResultSet(ResultSet aResultSet) throws SQLException {

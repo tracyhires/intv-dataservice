@@ -15,4 +15,10 @@ public interface DataService {
 	ResultSet findRecords(String[] aColumns, Collection<JoinParameter> joins, QueryParameter... queryParameters);
 	
 	ResultSetMetaData describeTable(String tablename);
+	
+	Integer[] insertRecords(UpdateParameter[] aInserts) throws DataServiceException;
+	
+	void updateRecords(UpdateParameter[] aUpdates) throws DataServiceException;
+	
+	void deleteRecords(UpdateParameter[] aDeletes) throws DataServiceException;
 }

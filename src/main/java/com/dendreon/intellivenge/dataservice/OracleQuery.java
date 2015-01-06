@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.LoggerFactory;
+
 public final class OracleQuery {
 
 	public static class QueryBuilder {
@@ -23,6 +25,7 @@ public final class OracleQuery {
 		private final String SPHS = " ? ";
 		private final Connection connection;
 		private String[] requestedColumns;
+		private HashMap<String,Object> columnValuePairs;
 		private String tableName;
 		private Set<QueryParameter> parameters;
 		private Collection<JoinParameter> joins;
@@ -30,6 +33,11 @@ public final class OracleQuery {
 		public  QueryBuilder(Connection aConnection) {
 			connection = aConnection;
 			parameters = new HashSet<QueryParameter>();
+		}
+		
+		public QueryBuilder addColumnValuePairs(HashMap<String, Object> aColumnValuePairs) {
+			columnValuePairs = aColumnValuePairs;
+			return this;
 		}
 
 		public QueryBuilder addRequestedColumns(String[] aColumns) {
@@ -57,7 +65,7 @@ public final class OracleQuery {
 			return this;
 		}
 
-		public PreparedStatement build() throws SQLException {
+		public PreparedStatement buildSelect() throws SQLException {
 			PreparedStatement pStatement = null;
 			StringBuffer queryString = new StringBuffer();
 			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
@@ -85,10 +93,93 @@ public final class OracleQuery {
 				queryString.append(tableName + SPACE);
 			}
 			if (parameters.size() > 0) {
-				preparedValues.putAll(addParameters(queryString));
+				preparedValues.putAll(addParameters(queryString, 1));
 			}
 			// create statement and add values
 			pStatement = connection.prepareStatement(queryString.toString());
+			for (Integer index : preparedValues.keySet()) {
+				setValue(pStatement, index, preparedValues.get(index));
+			}
+			return pStatement;
+		}
+		
+		public PreparedStatement buildDelete() throws SQLException {
+			PreparedStatement pStatement = null;
+			StringBuffer queryString = new StringBuffer();
+			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
+
+			queryString.append("delete from " + tableName + SPACE);
+			if (parameters.size() > 0) {
+				preparedValues.putAll(addParameters(queryString, 1));
+			}
+			// create statement and add values
+			pStatement = connection.prepareStatement(queryString.toString());
+			for (Integer index : preparedValues.keySet()) {
+				setValue(pStatement, index, preparedValues.get(index));
+			}
+			return pStatement;
+		}
+		
+		public PreparedStatement buildUpdate() throws SQLException {
+			PreparedStatement pStatement = null;
+			StringBuffer queryString = new StringBuffer();
+			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
+
+			queryString.append("update " + tableName + " set ");
+			int counter = 1;
+			Set<String> columnNames = columnValuePairs.keySet();
+			Iterator<String> columnNameIterator = columnNames.iterator();
+			while (columnNameIterator.hasNext()) {
+				String columnName = columnNameIterator.next();
+				queryString.append(columnName + SPACE);
+				queryString.append("=" + SPHS);
+				preparedValues.put(counter++, columnValuePairs.get(columnName));
+				if (columnNameIterator.hasNext()) {
+					queryString.append(",");
+				}
+			}
+			if (parameters.size() > 0) {
+				preparedValues.putAll(addParameters(queryString, counter));
+			}
+			// create statement and add values
+			pStatement = connection.prepareStatement(queryString.toString());
+			for (Integer index : preparedValues.keySet()) {
+				setValue(pStatement, index, preparedValues.get(index));
+			}
+			return pStatement;
+		}
+		
+		public PreparedStatement buildInsert() throws SQLException {
+			PreparedStatement pStatement = null;
+			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
+			StringBuffer queryString = new StringBuffer();
+			StringBuffer valueString = new StringBuffer(" values (");
+
+			queryString.append("insert into " + tableName +" (");
+			Set<String> columns = columnValuePairs.keySet();
+			Iterator<String> columnIterator = columns.iterator();
+			int counter = 1;
+			while (columnIterator.hasNext()) {
+				String column = columnIterator.next();
+				queryString.append(column);
+				if (columnValuePairs.get(column).toString().indexOf("NEXTVAL") > -1) {
+					valueString.append((String)columnValuePairs.get(column));
+				}
+				else {
+					valueString.append(PH);
+					preparedValues.put(counter++, columnValuePairs.get(column));
+				}
+				if (columnIterator.hasNext()) {
+					queryString.append(",");
+					valueString.append(",");
+				}
+				else {
+					queryString.append(")");
+					valueString.append(")");
+				}
+			}
+			// create statement and add values
+			pStatement = connection.prepareStatement(queryString.toString() + valueString.toString());
 			for (Integer index : preparedValues.keySet()) {
 				setValue(pStatement, index, preparedValues.get(index));
 			}
@@ -132,7 +223,7 @@ public final class OracleQuery {
 			aQueryString.append(whereBuffer.toString());
 		}
 		
-		private Map<Integer,Object> addParameters(StringBuffer aQueryString) {
+		private Map<Integer,Object> addParameters(StringBuffer aQueryString, int aCounterStart) {
 			Map<Integer,Object> preparedValues = new HashMap<Integer,Object>();
 			//in case of join
 			if (aQueryString.indexOf("where") == -1) {
@@ -142,7 +233,7 @@ public final class OracleQuery {
 				aQueryString.append("and" + SPACE);
 			}
 			Iterator<QueryParameter> paramIter = parameters.iterator();
-			int counter = 1;
+			int counter = aCounterStart;
 			while (paramIter.hasNext()) {
 				QueryParameter q = paramIter.next();
 				switch(q.getQueryType()) {
